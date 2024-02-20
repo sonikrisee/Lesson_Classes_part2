@@ -1,0 +1,140 @@
+class Cat():
+    def __init__(self, breed, color, age):
+        self._breed = breed
+        self._color = color
+        self._age = age
+
+    @property
+    def breed(self):
+        return self._breed
+
+    @property
+    def color(self):
+        return self._color
+
+    @property
+    def age(self):
+        return self._age
+
+    @age.setter
+    def age(self, new_age):
+        if new_age > self._age:
+            self._age = new_age
+            return self._age
+        else:
+            print("Введите корректный возраст")
+
+
+    def meow(self):
+        print('Мяу')
+
+    def purr(self):
+        print('Мррр')
+
+
+class HomeCat(Cat):
+    def __init__(self, breed, color, age, owner, name):
+        super().__init__(breed, color, age)
+        self._owner = owner
+        self._name = name
+
+    @property
+    def owner(self):
+        return self._owner
+
+    def name(self):
+        return self._name
+
+    def action(self):
+        print("мяу!")
+
+my_cat = HomeCat('Сибирская', 'Белая', 4 , 'Егор', 'Роза')
+print(my_cat.owner)
+print(my_cat.name)
+my_cat.action()
+my_cat.purr()
+
+
+class Humster:
+    def sleep(self):
+        print("Наелся и спит")
+
+class Parrot:
+    def sleep(self):
+        print("Сел на жердочку и спит")
+
+def home_sleep(animal):
+    animal.sleep()
+
+humster = Humster()
+parrot = Parrot()
+home_sleep(humster)
+home_sleep(parrot )
+
+
+#cat = Cat('Шотландская', 'Рыжая', 4)
+#print(cat.breed)
+#print(cat.color)
+#print(cat.age)
+#cat.age = 5
+#print(cat.age)
+#cat.breed = 'Cибирская'
+#print(cat.breed)
+
+
+#second_cat = Cat('Британская', 'Черная', 2)
+
+
+from abc import ABC, abstractmethod
+
+class Shape(ABC):
+    @abstractmethod
+    def area(self):
+        pass
+
+class Circle(Shape):
+    def __init__(self, radius):
+        self.radius = radius
+
+
+class Product:
+    def __init__(self, name, price, stock):
+        self.name = name
+        self.pricr = price
+        self.stock = stock
+
+
+    @property
+    def total_cost(self):
+        return self.price * self.stock
+
+
+    def __str__(self):
+        return f"{self.name}"
+
+class Order:
+    def __init__(self):
+        self.products = []
+
+
+    def add_products(self, *args, **kwargs):
+        for product, quantity, in kwargs.items():
+            self.products.append({"products": product, "quantity": quantity})
+
+
+    def __iter__(self):
+        return iter(self.products)
+
+product_in_stock = {"Bag"}: Product(name="Bag", price = 200, stock = 5)
+orders = []
+
+while True:
+    print("\n1, Посмотреть товары: ")
+    print("\2. Оформить заказ: ")
+    print("\n3. Выйти: ")
+
+    if choice == "2":
+        order = Order()
+
+          
+
