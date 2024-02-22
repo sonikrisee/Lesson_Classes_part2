@@ -100,7 +100,7 @@ class Circle(Shape):
 class Product:
     def __init__(self, name, price, stock):
         self.name = name
-        self.pricr = price
+        self.price = price
         self.stock = stock
 
 
