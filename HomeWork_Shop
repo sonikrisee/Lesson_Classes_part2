@@ -1,0 +1,111 @@
+class Product:
+    def __init__(self, name, price, stock):
+        self.name = name
+        self.price = price
+        self.stock = stock
+
+    @property
+    def total_cost(self):
+        return self.price * self.stock
+
+    def __str__(self):
+        return f"{self.name} - Цена: {self.price} руб., Количество: {self.stock}, " \
+               f"Общая стоимость: {self.total_cost} руб."
+
+class Order:
+    def __init__(self):
+        self.products = []
+
+    def add_product(self, *args, **kwargs):
+        for product, quantity in kwargs.items():
+            self.products.append({"products": product, "quantity": quantity})
+            if product is None:
+                print(f"Ошибка: Товар с именем '{product}' не найден.")
+                continue
+
+            if quantity > product.stock:
+                print(f"Ошибка: Недостаточное количество товара '{product.name}' на складе.")
+                continue
+            self.products.append({"product": product, "quantity": quantity})
+
+        for arg in args:
+            product_name, quantity = arg[0], arg[1]
+            product = products_in_stock.get(product_name)
+            if product is None:
+                print(f"Ошибка: Товар с именем '{product_name}' не найден.")
+                continue
+
+            if quantity > product.stock:
+                print(f"Ошибка: Недостаточное количество товара '{product.name}' на складе.")
+                continue
+            self.products.append({"product": product, "quantity": quantity})
+
+    def calculate_total_cost(self):
+        total_cost = sum(item["product"].total_cost * item["quantity"] for item in self.products)
+        return total_cost * 0.9 if total_cost > 1000 else total_cost
+
+    def __iter__(self):
+        return iter(self.products)
+
+    def __str__(self):
+        return f"Заказ: {', '.join([str(item['quantity']) + ' ' + item['product'].name for item in self.products])}, Общая стоимость: {self.calculate_total_cost()} руб."
+
+
+products_in_stock = {"Bag": Product("Bag", 200, 5), "Tomatos": Product("Tomatos", 50, 7),"Toy": Product("Toy", 100, 4)}
+orders = []
+
+while True:
+    print("\n1. Просмотреть товары")
+    print("2. Оформить заказ")
+    print("3. Выйти")
+
+    choice = input("Выберите действие: ")
+
+    if choice == "1":
+        print("\nТовары в наличии:")
+        for product in products_in_stock.values():
+            print(product)
+
+    elif choice == "2":
+        order = Order()
+        while True:
+            print("\nДобавление товара в заказ:")
+            for i, product in enumerate(products_in_stock.values(), start=1):
+                print(f"{i}. {product.name}")
+
+            print("0. Завершить заказ")
+
+            product_choice = input("Выберите товар (введите номер): ")
+
+            if product_choice == "0":
+                break
+
+            try:
+                product_index = int(product_choice) - 1
+                selected_product = list(products_in_stock.values())[product_index]
+            except (ValueError, IndexError):
+                print("Ошибка: Некорректный выбор товара.")
+                continue
+
+            quantity = int(input(f"Введите количество товара '{selected_product.name}': "))
+            if quantity <= 0:
+                print("Ошибка: Количество товара должно быть больше 0.")
+                continue
+
+            if quantity > selected_product.stock:
+                print("Ошибка: Недостаточное количество товара на складе.")
+                continue
+
+            order.add_product(("Bag", 2), ("Tomatos", 1))
+            print(f"Товар '{selected_product.name}' добавлен в заказ.")
+
+        orders.append(order)
+        print("\nЗаказ успешно оформлен!")
+        print(order)
+
+    elif choice == "3":
+        print("Выход из программы.")
+        break
+
+    else:
+        print("Ошибка: Некорректный выбор.")
